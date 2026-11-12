@@ -34,6 +34,16 @@ button:hover{background:#ffffff24;border-color:var(--gold)}button:focus-visible,
 #scene h1{text-wrap:balance}
 .copy{position:relative}
 .copy:after{content:"✦  ·  ✧  ·  ✦";display:block;text-align:center;color:#e8b9d0;letter-spacing:.35em;font-size:13px;margin:30px 0 0;opacity:.8}
+/* Soften the story underneath the opening title card. */
+body.start-screen-active #backdrop,
+body.start-screen-active #stardust,
+body.start-screen-active main{
+ filter:blur(7px);
+ transform:scale(1.015);
+ transition:filter 1s ease,transform 1s ease;
+}
+body.start-screen-active main{pointer-events:none}
+#startScreen{backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
 #startScreen{position:fixed;inset:0;z-index:12;display:flex;align-items:center;justify-content:center;text-align:center;padding:28px;background:radial-gradient(ellipse at 50% 38%,#30304ddd 0,#111426f5 58%,#080a16 100%);transition:opacity 1s ease,visibility 1s ease}
 #startScreen.dismissed{opacity:0;visibility:hidden;pointer-events:none}
 .start-inner{width:min(680px,100%);animation:rise 1.2s ease}
@@ -175,11 +185,13 @@ audio.addEventListener("pause",()=>{playBtn.textContent="Play music";});
 
 // Keep the soundtrack tucked away until the reader chooses to begin.
 const startScreen=document.getElementById("startScreen"),startButton=document.getElementById("startButton");
+document.body.classList.add("start-screen-active");
 musicPanel.classList.add("minimized");
 musicToggle.textContent="♫ Music";
 musicToggle.setAttribute("aria-expanded","false");
 startButton.addEventListener("click",async()=>{
  startScreen.classList.add("dismissed");
+ document.body.classList.remove("start-screen-active");
  musicPanel.classList.add("minimized");
  musicToggle.textContent="♫ Music";
  musicToggle.setAttribute("aria-expanded","false");
