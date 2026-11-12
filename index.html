@@ -20,12 +20,10 @@ button{font:13px system-ui,sans-serif;letter-spacing:.06em;color:white;backgroun
 button:hover{background:#ffffff24;border-color:var(--gold)}button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 #next{background:#f2d9b9;color:#211a2b;border-color:transparent;font-weight:600}
 .progress{font:12px system-ui,sans-serif;color:var(--muted)}
-#music{position:fixed;z-index:5;right:14px;bottom:14px;width:min(330px,calc(100% - 28px));background:#101426ed;border:1px solid #ffffff2b;border-radius:18px;padding:13px 15px;box-shadow:0 10px 40px #0008;font:12px/1.5 system-ui,sans-serif;backdrop-filter:blur(12px)}
+#music{position:fixed;z-index:5;right:14px;bottom:14px;width:min(300px,calc(100% - 28px));background:#101426ed;border:1px solid #ffffff2b;border-radius:18px;padding:13px 15px;box-shadow:0 10px 40px #0008;font:12px/1.5 system-ui,sans-serif;backdrop-filter:blur(12px)}
 .music-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px;color:#fff}.music-head strong{letter-spacing:.12em;text-transform:uppercase;font-size:10px;color:var(--gold)}
-.music-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.music-controls button{padding:6px 11px;font-size:11px}.music-controls input[type=range]{width:90px;accent-color:var(--rose)}
-#spotifyUrl{width:100%;margin-top:9px;background:#ffffff0c;border:1px solid #ffffff30;border-radius:8px;padding:8px;color:white;font:11px system-ui}
-#spotifyFrame{width:100%;height:80px;border:0;border-radius:10px;margin-top:8px;display:none}
-#fileInput{display:none}.hint{font-size:10px;color:#bdb4c5;margin-top:6px}
+.music-controls{display:flex;align-items:center;gap:10px}.music-controls button{padding:7px 13px;font-size:11px}.music-controls input[type=range]{flex:1;min-width:90px;accent-color:var(--rose)}
+.hint{font-size:10px;color:#bdb4c5;margin-top:6px}
 .letter-wrap{background:#f6eee8;color:#362b39;padding:clamp(25px,6vw,58px);border-radius:4px;box-shadow:0 24px 90px #0009;line-height:1.9}
 .letter-wrap h2{font-size:clamp(27px,4vw,38px);font-weight:400;margin:0 0 25px;color:#684a60}
 .letter-wrap p{margin:0 0 1.25em}.letter-wrap .sign{margin-top:32px;font-style:italic}.letter-wrap .ps{font:12px/1.6 system-ui;color:#81747e;margin-top:30px}
@@ -42,28 +40,24 @@ body.letter-mode #backdrop{opacity:.1}
  <section id="scene" aria-live="polite"></section>
  <div class="actions"><span class="progress" id="progress"></span><button id="next" type="button">Begin our story →</button></div>
 </main>
-<aside id="music" aria-label="Music player">
+<aside id="music" aria-label="Background music controls">
  <div class="music-head"><strong>Our little soundtrack</strong><span id="volumeLabel">20% volume</span></div>
  <div class="music-controls">
   <button type="button" id="playBtn">Play music</button>
-  <button type="button" id="uploadBtn">Upload song</button>
-  <label for="volume" class="hint">Volume</label><input id="volume" type="range" min="0" max="1" step=".01" value=".2">
+  <label for="volume" class="hint">Volume</label><input id="volume" type="range" min="0" max="1" step=".01" value=".2" aria-label="Music volume">
  </div>
- <input id="fileInput" type="file" accept="audio/*">
- <input id="spotifyUrl" type="url" placeholder="Paste a Spotify playlist / track link, then press Enter" aria-label="Spotify link">
- <iframe id="spotifyFrame" title="Spotify player" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
- <div class="hint">Local uploads play only on your device. Spotify has its own volume control.</div>
- <audio id="audio" loop></audio>
+ <div class="hint">Background music · hosted with our story</div>
+ <audio id="audio" src="assets/music/background.mp3" loop preload="none"></audio>
 </aside>
 <script>
 const scenes=[
  {tag:"For my Lune · One year",title:"A Year Written in Starlight",image:"https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?auto=format&fit=crop&w=1800&q=85",body:`<p class="muted">Somewhere between two distant skies, a little light kept finding its way home.</p><p>This is a story about Moon and Lune: two souls from different corners of the same enchanted world, and the strange, beautiful magic of choosing each other.</p><p>For you, my love. Happy first anniversary. ♡</p>`,button:"Turn the first page →"},
- {tag:"Chapter I · The Astral Academy",title:"The boy who followed the moon",image:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1800&q=85",body:`<p>Moon was an apprentice mage who spent his evenings mapping constellations. He knew the names of a thousand stars, but none of them had ever made him feel less alone.</p><p>Then, one night, a message appeared in the margin of his spellbook. It was written in silver ink, signed by a girl named Lune.</p><p class="dialogue">Lune: You drew the northern sky upside down.<br>Moon: I was testing whether the stars would notice.<br>Lune: And did they?<br>Moon: One did. Apparently, she's quite observant.</p><p>That was how their little universe began: with a correction, a laugh, and a conversation neither wanted to end.</p>`},
- {tag:"Chapter II · The Starlit Forest",title:"A thousand little constellations",image:"https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1800&q=85",body:`<p>They began meeting in a forest that existed between worlds. Fireflies drifted like tiny lanterns, and the trees remembered every promise spoken beneath their branches.</p><p>They traded stories, songs, silly jokes, and the small details that made up their days. Lune taught Moon that magic did not always arrive as a grand spell. Sometimes it was simply staying a little longer.</p><p class="dialogue">Moon: If I could, I'd make a portal so we wouldn't have to say goodnight from opposite sides of the sky.<br>Lune: Then make one someday.<br>Moon: I will. But until then, I'll keep finding my way back here.</p><p>And so the forest became their place: a little world built from ordinary moments that somehow felt enchanted.</p>`},
- {tag:"Chapter III · The Glass Sea",title:"When distance became a spell",image:"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1800&q=85",body:`<p>But even magic had limits. The sea between their kingdoms grew wider. Some days the messages arrived late; some nights the stars were hidden by clouds. They missed chances, misunderstood silences, and learned that love could be real while still needing care.</p><p>Moon sometimes thought that meaning well was enough. Lune needed him to understand that promises had to become actions: a plan made, a question asked, a little time protected for them.</p><p class="dialogue">Lune: I don't need every day to be perfect. I just want to feel that we're building something together.<br>Moon: I hear you. I don't want you carrying that hope alone.</p><p>He could not command the sea to disappear. He could learn to cross it, one deliberate step at a time.</p>`},
- {tag:"Chapter IV · The Lost Kingdom",title:"The night the stars went quiet",image:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1800&q=85",body:`<p>A dark enchantment swept across the forest. Their paths split, their familiar meeting place faded, and for a while neither could find the other among the endless roads.</p><p>Moon kept the old map folded close. Lune carried a small star in a glass charm. They each wondered whether the other still remembered the way.</p><p>Time passed. They grew. They learned that missing someone was not the same as knowing how to love them well. And still, somewhere beneath all the distance, the little light remained.</p>`},
- {tag:"Chapter V · The Lantern Festival",title:"Two paths, one light",image:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=85",body:`<p>At the edge of a quiet town, a festival filled the evening sky with floating lanterns. Moon had come to leave a wish among them. Lune had come carrying the star in her glass charm.</p><p>They saw each other across the crowd. No spell brought them together. No prophecy demanded it. They simply took a step, then another, until the distance was only a few feet.</p><p class="dialogue">Moon: I kept thinking I'd recognize you anywhere.<br>Lune: And?<br>Moon: I was right. Even with a thousand lanterns in the sky, I'd know your light.</p><p>They did not pretend the hard parts had never happened. They chose to meet each other honestly, and to make the next chapter with more than wishes.</p>`},
- {tag:"Epilogue · The road ahead",title:"A future we get to write",image:"https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1800&q=85",body:`<p>Their story did not end at the festival. There were still new spells to learn, new places to visit, and ordinary days waiting to be made special.</p><p>Somewhere ahead was a road beneath a gold-pink sunset. Two helmets rested side by side. There would be games to play, victories to celebrate, plans to make, and quiet moments when simply being together was enough.</p><p>They could not see every detail of the future. But they could keep choosing the direction together.</p><div class="heart">♡</div><p class="muted">And now, my Lune, the story gives way to something real.</p>`,button:"Read the letter I wrote for you ♡"},
+ {tag:"Chapter I · The Astral Academy",title:"The boy who followed the moon",image:"https://images.unsplash.com/photo-1556621595-6dd9502e265e?auto=format&fit=crop&w=1800&q=85",body:`<p>Moon was an apprentice mage who spent his evenings mapping constellations. He knew the names of a thousand stars, but none of them had ever made him feel less alone.</p><p>Then, one night, a message appeared in the margin of his spellbook. It was written in silver ink, signed by a girl named Lune.</p><p class="dialogue">Lune: You drew the northern sky upside down.<br>Moon: I was testing whether the stars would notice.<br>Lune: And did they?<br>Moon: One did. Apparently, she's quite observant.</p><p>That was how their little universe began: with a correction, a laugh, and a conversation neither wanted to end.</p>`},
+ {tag:"Chapter II · The Starlit Forest",title:"A thousand little constellations",image:"https://images.unsplash.com/photo-1771749607076-b6c940404f73?auto=format&fit=crop&w=1800&q=85",body:`<p>They began meeting in a forest that existed between worlds. Fireflies drifted like tiny lanterns, and the trees remembered every promise spoken beneath their branches.</p><p>They traded stories, songs, silly jokes, and the small details that made up their days. Lune taught Moon that magic did not always arrive as a grand spell. Sometimes it was simply staying a little longer.</p><p class="dialogue">Moon: If I could, I'd make a portal so we wouldn't have to say goodnight from opposite sides of the sky.<br>Lune: Then make one someday.<br>Moon: I will. But until then, I'll keep finding my way back here.</p><p>And so the forest became their place: a little world built from ordinary moments that somehow felt enchanted.</p>`},
+ {tag:"Chapter III · The Glass Sea",title:"When distance became a spell",image:"https://images.unsplash.com/photo-1762859226504-764c76ac4af9?auto=format&fit=crop&w=1800&q=85",body:`<p>But even magic had limits. The sea between their kingdoms grew wider. Some days the messages arrived late; some nights the stars were hidden by clouds. They missed chances, misunderstood silences, and learned that love could be real while still needing care.</p><p>Moon sometimes thought that meaning well was enough. Lune needed him to understand that promises had to become actions: a plan made, a question asked, a little time protected for them.</p><p class="dialogue">Lune: I don't need every day to be perfect. I just want to feel that we're building something together.<br>Moon: I hear you. I don't want you carrying that hope alone.</p><p>He could not command the sea to disappear. He could learn to cross it, one deliberate step at a time.</p>`},
+ {tag:"Chapter IV · The Lost Kingdom",title:"The night the stars went quiet",image:"https://images.unsplash.com/photo-1556621595-6dd9502e265e?auto=format&fit=crop&w=1800&q=85",body:`<p>A dark enchantment swept across the forest. Their paths split, their familiar meeting place faded, and for a while neither could find the other among the endless roads.</p><p>Moon kept the old map folded close. Lune carried a small star in a glass charm. They each wondered whether the other still remembered the way.</p><p>Time passed. They grew. They learned that missing someone was not the same as knowing how to love them well. And still, somewhere beneath all the distance, the little light remained.</p>`},
+ {tag:"Chapter V · The Lantern Festival",title:"Two paths, one light",image:"https://images.unsplash.com/photo-1757944075647-2498be56bb62?auto=format&fit=crop&w=1800&q=85",body:`<p>At the edge of a quiet town, a festival filled the evening sky with floating lanterns. Moon had come to leave a wish among them. Lune had come carrying the star in her glass charm.</p><p>They saw each other across the crowd. No spell brought them together. No prophecy demanded it. They simply took a step, then another, until the distance was only a few feet.</p><p class="dialogue">Moon: I kept thinking I'd recognize you anywhere.<br>Lune: And?<br>Moon: I was right. Even with a thousand lanterns in the sky, I'd know your light.</p><p>They did not pretend the hard parts had never happened. They chose to meet each other honestly, and to make the next chapter with more than wishes.</p>`},
+ {tag:"Epilogue · The road ahead",title:"A future we get to write",image:"https://images.unsplash.com/photo-1564468669669-39ccc160a8fa?auto=format&fit=crop&w=1800&q=85",body:`<p>Their story did not end at the festival. There were still new spells to learn, new places to visit, and ordinary days waiting to be made special.</p><p>Somewhere ahead was a road beneath a gold-pink sunset. Two helmets rested side by side. There would be games to play, victories to celebrate, plans to make, and quiet moments when simply being together was enough.</p><p>They could not see every detail of the future. But they could keep choosing the direction together.</p><div class="heart">♡</div><p class="muted">And now, my Lune, the story gives way to something real.</p>`,button:"Read the letter I wrote for you ♡"},
  {tag:"The final page · From Moon to Lune",title:"My letter to you",image:"https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1800&q=85",letter:true}
 ];
 let index=0;
@@ -75,15 +69,34 @@ function render(){const s=scenes[index];document.body.classList.toggle("letter-m
 function advance(){if(index<scenes.length-1){index++;render();}}
 next.addEventListener("click",()=>{});
 render();
-const audio=document.getElementById("audio"),volume=document.getElementById("volume"),volumeLabel=document.getElementById("volumeLabel"),playBtn=document.getElementById("playBtn"),fileInput=document.getElementById("fileInput"),spotifyUrl=document.getElementById("spotifyUrl"),spotifyFrame=document.getElementById("spotifyFrame");
+const audio=document.getElementById("audio"),volume=document.getElementById("volume"),volumeLabel=document.getElementById("volumeLabel"),playBtn=document.getElementById("playBtn");
 audio.volume=.2;
-function updateVolume(){audio.volume=Number(volume.value);volumeLabel.textContent=Math.round(audio.volume*100)+"% volume";}
+let resumeAfterMute=false;
+function updateVolume(){
+ const level=Number(volume.value);
+ audio.volume=level;
+ volumeLabel.textContent=Math.round(level*100)+"% volume";
+ if(level===0){
+  resumeAfterMute=!audio.paused;
+  audio.pause();
+  playBtn.textContent="Play music";
+ }else if(resumeAfterMute){
+  resumeAfterMute=false;
+  audio.play().then(()=>playBtn.textContent="Pause music").catch(()=>playBtn.textContent="Play music");
+ }
+}
 volume.addEventListener("input",updateVolume);
-playBtn.addEventListener("click",async()=>{if(!audio.src){playBtn.textContent="Upload a song first";return;}if(audio.paused){try{await audio.play();playBtn.textContent="Pause music";}catch(e){playBtn.textContent="Tap to play";}}else{audio.pause();playBtn.textContent="Play music";}});
-document.getElementById("uploadBtn").addEventListener("click",()=>fileInput.click());
-fileInput.addEventListener("change",()=>{const file=fileInput.files&&fileInput.files[0];if(!file)return;if(audio.dataset.objectUrl)URL.revokeObjectURL(audio.dataset.objectUrl);const url=URL.createObjectURL(file);audio.dataset.objectUrl=url;audio.src=url;audio.play().then(()=>playBtn.textContent="Pause music").catch(()=>playBtn.textContent="Play music");});
-function spotifyEmbed(raw){try{const u=new URL(raw.trim());if(u.hostname!=="open.spotify.com")return null;const parts=u.pathname.split("/").filter(Boolean);if(parts.length<2)return null;return "https://open.spotify.com/embed/"+parts[0]+"/"+parts[1]+"?utm_source=generator";}catch(e){return null;}}
-spotifyUrl.addEventListener("keydown",e=>{if(e.key!=="Enter")return;const embed=spotifyEmbed(spotifyUrl.value);if(!embed){spotifyUrl.setCustomValidity("Paste a valid open.spotify.com playlist, album, track, artist, show, or episode link.");spotifyUrl.reportValidity();return;}spotifyUrl.setCustomValidity("");spotifyFrame.src=embed;spotifyFrame.style.display="block";});
+playBtn.addEventListener("click",async()=>{
+ if(audio.paused){
+  if(Number(volume.value)===0){volume.value=".2";updateVolume();}
+  try{await audio.play();playBtn.textContent="Pause music";}catch(e){playBtn.textContent="Tap to play";}
+ }else{
+  audio.pause();
+  playBtn.textContent="Play music";
+ }
+});
+audio.addEventListener("play",()=>{playBtn.textContent="Pause music";});
+audio.addEventListener("pause",()=>{playBtn.textContent="Play music";});
 </script>
 </body>
 </html>
