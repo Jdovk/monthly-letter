@@ -21,7 +21,13 @@ This update is on the `anniversary-12-month-update` branch. Merge its pull reque
 - Only add music you created or have permission to distribute.
 
 ## Scene photographs
-Story backgrounds use free-to-use Unsplash photographs. The images are selected to match the scene themes: a moonlit castle, misty lantern forest, stormy sea, lantern festival, and golden-hour road.
+Story backgrounds use free-to-use Unsplash photographs selected for each scene:
+- [Moonlit castle](https://unsplash.com/photos/neuschwanstein-castle-under-starry-night-sky-xTfFmsXxEfA)
+- [Misty forest with lanterns](https://unsplash.com/photos/misty-forest-landscape-with-lanterns-in-foreground-4VTznPpmuDs)
+- [Stormy ocean](https://unsplash.com/photos/waves-crashing-on-a-dark-stormy-ocean-CoTB19-2Gt8)
+- [Aurora-lit castle ruins](https://unsplash.com/photos/ancient-castle-ruins-under-a-starry-aurora-lit-sky-xr6QnbOHtgc)
+- [Lantern festival](https://unsplash.com/photos/glowing-japanese-lanterns-at-a-night-festival-guEJrCgWtGs)
+- [Golden-hour road](https://unsplash.com/photos/road-during-golden-hour-aTEo-OzcMnM)
 
 ## Monthly updates
 Use `MONTHLY_UPDATE_TEMPLATE.md` as a checklist. Keep the personal letter as the final page after the story, and preserve earlier versions in Git history.
