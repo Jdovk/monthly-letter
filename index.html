@@ -34,6 +34,14 @@ button:hover{background:#ffffff24;border-color:var(--gold)}button:focus-visible,
 #scene h1{text-wrap:balance}
 .copy{position:relative}
 .copy:after{content:"✦  ·  ✧  ·  ✦";display:block;text-align:center;color:#e8b9d0;letter-spacing:.35em;font-size:13px;margin:30px 0 0;opacity:.8}
+#startScreen{position:fixed;inset:0;z-index:12;display:flex;align-items:center;justify-content:center;text-align:center;padding:28px;background:radial-gradient(ellipse at 50% 38%,#30304ddd 0,#111426f5 58%,#080a16 100%);transition:opacity 1s ease,visibility 1s ease}
+#startScreen.dismissed{opacity:0;visibility:hidden;pointer-events:none}
+.start-inner{width:min(680px,100%);animation:rise 1.2s ease}
+.start-mark{font-size:clamp(42px,8vw,68px);color:var(--gold);text-shadow:0 0 35px #f5d99b88;margin-bottom:18px;animation:glow 4s ease-in-out infinite}
+.start-inner h1{font-size:clamp(38px,7vw,70px);margin:14px 0 18px}
+.start-subtitle{color:#d6cbdc;max-width:500px;margin:0 auto 28px}
+#startButton{background:#f2d9b9;color:#211a2b;border:0;font-weight:600;padding:15px 30px}
+.start-note{font:11px/1.6 system-ui,sans-serif;color:#bdb4c5;margin-top:16px}
 #cutscene{position:fixed;inset:0;z-index:10;display:none;align-items:center;justify-content:center;text-align:center;padding:28px;background:radial-gradient(ellipse at center,#20213bdc,#080a16 78%);opacity:0;transition:opacity 1.2s ease}
 #cutscene.active{display:flex;opacity:1}
 #cutscene .cutscene-inner{max-width:650px;animation:rise 1.5s ease}
@@ -61,6 +69,16 @@ body.letter-mode #backdrop{opacity:.1}
 <body>
 <div id="backdrop" aria-hidden="true"></div>
 <div id="stardust" aria-hidden="true"></div>
+<div id="startScreen" role="dialog" aria-modal="true" aria-labelledby="startTitle">
+ <div class="start-inner">
+  <div class="start-mark">✧ ☾ ✧</div>
+  <div class="kicker">A little world made for you</div>
+  <h1 id="startTitle">Moon & Lune</h1>
+  <p class="start-subtitle">A Year Written in Starlight<br><span class="muted">Our story, our memories, and everything still waiting ahead.</span></p>
+  <button type="button" id="startButton">Begin our story ♡</button>
+  <p class="start-note">Best experienced with sound on.</p>
+ </div>
+</div>
 <main>
  <section id="scene" aria-live="polite"></section>
  <div class="actions"><span class="progress" id="progress"></span><button id="next" type="button">Begin our story →</button></div>
@@ -154,6 +172,25 @@ playBtn.addEventListener("click",async()=>{
 });
 audio.addEventListener("play",()=>{playBtn.textContent="Pause music";});
 audio.addEventListener("pause",()=>{playBtn.textContent="Play music";});
+
+// Keep the soundtrack tucked away until the reader chooses to begin.
+const startScreen=document.getElementById("startScreen"),startButton=document.getElementById("startButton");
+musicPanel.classList.add("minimized");
+musicToggle.textContent="♫ Music";
+musicToggle.setAttribute("aria-expanded","false");
+startButton.addEventListener("click",async()=>{
+ startScreen.classList.add("dismissed");
+ musicPanel.classList.add("minimized");
+ musicToggle.textContent="♫ Music";
+ musicToggle.setAttribute("aria-expanded","false");
+ try{
+  await audio.play();
+  playBtn.textContent="Pause music";
+ }catch(e){
+  playBtn.textContent="Play music";
+  // Playback can fail if the owner has not uploaded the MP3 yet.
+ }
+});
 </script>
 </body>
 </html>
