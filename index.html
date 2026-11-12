@@ -20,10 +20,34 @@ button{font:13px system-ui,sans-serif;letter-spacing:.06em;color:white;backgroun
 button:hover{background:#ffffff24;border-color:var(--gold)}button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 #next{background:#f2d9b9;color:#211a2b;border-color:transparent;font-weight:600}
 .progress{font:12px system-ui,sans-serif;color:var(--muted)}
-#music{position:fixed;z-index:5;right:14px;bottom:14px;width:min(300px,calc(100% - 28px));background:#101426ed;border:1px solid #ffffff2b;border-radius:18px;padding:13px 15px;box-shadow:0 10px 40px #0008;font:12px/1.5 system-ui,sans-serif;backdrop-filter:blur(12px)}
+#music{position:fixed;z-index:8;right:16px;bottom:16px;width:min(310px,calc(100% - 32px));background:linear-gradient(145deg,#171b34f2,#101426f2);border:1px solid #e9d6f05a;border-radius:18px;padding:13px 15px;box-shadow:0 12px 45px #0009,0 0 24px #c9a7e51a;font:12px/1.5 system-ui,sans-serif;backdrop-filter:blur(14px);transition:transform .35s ease,opacity .35s ease}
+#music.minimized{width:auto;padding:0;border-radius:999px;transform:translateY(0)}
+#music.minimized .music-content{display:none}
+#music.minimized #musicToggle{padding:10px 15px;border:0;background:transparent;color:var(--gold)}
 .music-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px;color:#fff}.music-head strong{letter-spacing:.12em;text-transform:uppercase;font-size:10px;color:var(--gold)}
 .music-controls{display:flex;align-items:center;gap:10px}.music-controls button{padding:7px 13px;font-size:11px}.music-controls input[type=range]{flex:1;min-width:90px;accent-color:var(--rose)}
+#musicToggle{display:block;margin-left:auto;padding:4px 9px;font-size:10px;border-color:#e9d6f055;color:#f5d99b}
 .hint{font-size:10px;color:#bdb4c5;margin-top:6px}
+#stardust{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;background-image:radial-gradient(1px 1px at 8% 17%,#fff 99%,transparent),radial-gradient(1px 1px at 77% 13%,#f5d99b 99%,transparent),radial-gradient(2px 2px at 92% 39%,#fff 99%,transparent),radial-gradient(1px 1px at 22% 72%,#e8b9d0 99%,transparent),radial-gradient(1px 1px at 63% 83%,#fff 99%,transparent),radial-gradient(2px 2px at 44% 32%,#fff 99%,transparent);background-size:370px 310px;animation:drift 35s linear infinite}
+.ornament{color:#e8c9e4;text-align:center;letter-spacing:.8em;font-size:13px;opacity:.75;margin:0 auto 24px;text-shadow:0 0 18px #e8b9d0}
+#scene:before{content:"✧";display:block;text-align:center;color:#f5d99b;font-size:24px;opacity:.8;margin-bottom:8px;text-shadow:0 0 22px #f5d99b}
+#scene h1{text-wrap:balance}
+.copy{position:relative}
+.copy:after{content:"✦  ·  ✧  ·  ✦";display:block;text-align:center;color:#e8b9d0;letter-spacing:.35em;font-size:13px;margin:30px 0 0;opacity:.8}
+#cutscene{position:fixed;inset:0;z-index:10;display:none;align-items:center;justify-content:center;text-align:center;padding:28px;background:radial-gradient(ellipse at center,#20213bdc,#080a16 78%);opacity:0;transition:opacity 1.2s ease}
+#cutscene.active{display:flex;opacity:1}
+#cutscene .cutscene-inner{max-width:650px;animation:rise 1.5s ease}
+#cutscene .cutscene-mark{font-size:42px;color:var(--gold);text-shadow:0 0 35px #f5d99b88;margin-bottom:24px}
+#cutscene h2{font-size:clamp(27px,5vw,48px);font-weight:400;line-height:1.2;margin:0 0 18px}
+#cutscene p{color:#d6cbdc;font-size:16px}
+#cutscene button{margin-top:24px;background:#f2d9b9;color:#211a2b;border:0}
+.letter-wrap{opacity:0;transform:translateY(22px);transition:opacity 1.4s ease,transform 1.4s ease}
+.letter-wrap.revealed{opacity:1;transform:none}
+.letter-heading{opacity:0;transition:opacity 1s ease .3s}
+.letter-heading.revealed{opacity:1}
+@keyframes drift{to{background-position:370px 310px}}
+@keyframes glow{50%{text-shadow:0 0 25px #f5d99b,0 0 50px #e8b9d0}}
+
 .letter-wrap{background:#f6eee8;color:#362b39;padding:clamp(25px,6vw,58px);border-radius:4px;box-shadow:0 24px 90px #0009;line-height:1.9}
 .letter-wrap h2{font-size:clamp(27px,4vw,38px);font-weight:400;margin:0 0 25px;color:#684a60}
 .letter-wrap p{margin:0 0 1.25em}.letter-wrap .sign{margin-top:32px;font-style:italic}.letter-wrap .ps{font:12px/1.6 system-ui;color:#81747e;margin-top:30px}
@@ -36,19 +60,32 @@ body.letter-mode #backdrop{opacity:.1}
 </head>
 <body>
 <div id="backdrop" aria-hidden="true"></div>
+<div id="stardust" aria-hidden="true"></div>
 <main>
  <section id="scene" aria-live="polite"></section>
  <div class="actions"><span class="progress" id="progress"></span><button id="next" type="button">Begin our story →</button></div>
 </main>
 <aside id="music" aria-label="Background music controls">
- <div class="music-head"><strong>Our little soundtrack</strong><span id="volumeLabel">20% volume</span></div>
- <div class="music-controls">
-  <button type="button" id="playBtn">Play music</button>
-  <label for="volume" class="hint">Volume</label><input id="volume" type="range" min="0" max="1" step=".01" value=".2" aria-label="Music volume">
+ <button type="button" id="musicToggle" aria-expanded="true" aria-controls="musicContent">Hide music −</button>
+ <div class="music-content" id="musicContent">
+  <div class="music-head"><strong>✦ Our little soundtrack</strong><span id="volumeLabel">20% volume</span></div>
+  <div class="music-controls">
+   <button type="button" id="playBtn">Play music</button>
+   <label for="volume" class="hint">Volume</label><input id="volume" type="range" min="0" max="1" step=".01" value=".2" aria-label="Music volume">
+  </div>
+  <div class="hint">A little music for our story ♡</div>
  </div>
- <div class="hint">Background music · hosted with our story</div>
  <audio id="audio" src="assets/music/background.mp3" loop preload="none"></audio>
 </aside>
+<div id="cutscene" role="dialog" aria-modal="true" aria-labelledby="cutsceneTitle">
+ <div class="cutscene-inner">
+  <div class="cutscene-mark">✧ ☾ ✧</div>
+  <div class="kicker">Beyond the last page</div>
+  <h2 id="cutsceneTitle">The story can wait a moment.</h2>
+  <p>There is one more thing I wanted you to see.<br>Not as Moon the mage… but as me.</p>
+  <button type="button" id="openLetter">Open my letter ♡</button>
+ </div>
+</div>
 <script>
 const scenes=[
  {tag:"For my Lune · One year",title:"A Year Written in Starlight",image:"https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?auto=format&fit=crop&w=1800&q=85",body:`<p class="muted">Somewhere between two distant skies, a little light kept finding its way home.</p><p>This is a story about Moon and Lune: two souls from different corners of the same enchanted world, and the strange, beautiful magic of choosing each other.</p><p>For you, my love. Happy first anniversary. ♡</p>`,button:"Turn the first page →"},
@@ -63,12 +100,32 @@ const scenes=[
 let index=0;
 const scene=document.getElementById("scene"),next=document.getElementById("next"),progress=document.getElementById("progress"),backdrop=document.getElementById("backdrop");
 function render(){const s=scenes[index];document.body.classList.toggle("letter-mode",!!s.letter);backdrop.style.backgroundImage="url('"+s.image+"')";scene.style.animation="none";void scene.offsetWidth;scene.style.animation="rise .8s ease";
- if(s.letter){scene.innerHTML=`<div class="kicker">${s.tag}</div><h1>${s.title}</h1><article class="letter-wrap"><h2>To my Lune, happy one year. ♡</h2><p>My love,</p><p>One whole year. I still find it a little unreal that someone who started as a name on a screen became such an important part of my life. Even with all the distance between us, you've given me so many moments I want to keep: the laughter, the late conversations, the little updates about our days, and all the times you made an ordinary moment feel special.</p><p>I know I haven't always been the best at showing you how much you mean to me. There have been times I didn't take the initiative, didn't make plans, or let silence do the talking when I should have reached for you. I'm sorry for those moments. I don't want you to have to keep wondering whether I care. I want to show it more clearly, through the way I listen, the effort I make, and the promises I actually follow through on.</p><p>I want to do the things we've talked about and the things you've wanted us to experience together. I want us to play Valorant, celebrate our wins (and laugh at our questionable aim), and work toward the goals we dream about. I want to make memories outside a screen too: the motorcycle rides we've imagined, stopping somewhere to watch the sunset, and all those simple dates that become special just because we're there together.</p><p>I can't promise that every day will be easy or that I'll never make mistakes. I can promise that I want to keep learning how to love you better, keep making room for us, and keep choosing you with intention. I want to build a future where you don't just hear that you're important to me—you feel it in the way I show up.</p><p>Thank you for being my Lune, for sharing this year with me, and for giving me a place in your world. Whatever chapters are waiting for us, I hope we get to write them side by side.</p><p>Happy first anniversary, my love. I love you. Here's to our next chapter, and all the little adventures in between.</p><p class="sign">Always yours,<br>Moon ♡</p><p class="ps">P.S. This little world is something I want to keep updating for every monthsary and anniversary. So this isn't the last page—just the first page of the next year.</p></article>`;next.textContent="Read our story again ↺";next.onclick=()=>{index=0;render();};}
+ if(s.letter){scene.innerHTML=`<div class="kicker letter-heading" id="letterHeading">${s.tag}</div><h1 class="letter-heading" id="letterTitle">${s.title}</h1><article class="letter-wrap" id="letterWrap"><h2>To my Lune, happy one year. ♡</h2><p>My love,</p><p>One whole year. I still find it a little unreal that someone who started as a name on a screen became such an important part of my life. Even with all the distance between us, you've given me so many moments I want to keep: the laughter, the late conversations, the little updates about our days, and all the times you made an ordinary moment feel special.</p><p>I know I haven't always been the best at showing you how much you mean to me. There have been times I didn't take the initiative, didn't make plans, or let silence do the talking when I should have reached for you. I'm sorry for those moments. I don't want you to have to keep wondering whether I care. I want to show it more clearly, through the way I listen, the effort I make, and the promises I actually follow through on.</p><p>I want to do the things we've talked about and the things you've wanted us to experience together. I want us to play Valorant, celebrate our wins (and laugh at our questionable aim), and work toward the goals we dream about. I want to make memories outside a screen too: the motorcycle rides we've imagined, stopping somewhere to watch the sunset, and all those simple dates that become special just because we're there together.</p><p>I can't promise that every day will be easy or that I'll never make mistakes. I can promise that I want to keep learning how to love you better, keep making room for us, and keep choosing you with intention. I want to build a future where you don't just hear that you're important to me—you feel it in the way I show up.</p><p>Thank you for being my Lune, for sharing this year with me, and for giving me a place in your world. Whatever chapters are waiting for us, I hope we get to write them side by side.</p><p>Happy first anniversary, my love. I love you. Here's to our next chapter, and all the little adventures in between.</p><p class="sign">Always yours,<br>Moon ♡</p><p class="ps">P.S. This little world is something I want to keep updating for every monthsary and anniversary. So this isn't the last page—just the first page of the next year.</p></article>`;next.textContent="Read our story again ↺";next.onclick=()=>{index=0;render();};showLetterCutscene();}
  else{scene.innerHTML=`<div class="kicker">${s.tag}</div><h1>${s.title}</h1><div class="copy">${s.body}</div>`;next.textContent=s.button||"Continue →";next.onclick=advance;}
  progress.textContent=(index+1)+" / "+scenes.length;window.scrollTo({top:0,behavior:"smooth"});}
 function advance(){if(index<scenes.length-1){index++;render();}}
 next.addEventListener("click",()=>{});
 render();
+const musicPanel=document.getElementById("music"),musicToggle=document.getElementById("musicToggle");
+musicToggle.addEventListener("click",()=>{
+ const minimized=musicPanel.classList.toggle("minimized");
+ musicToggle.textContent=minimized?"♫ Music":"Hide music −";
+ musicToggle.setAttribute("aria-expanded",String(!minimized));
+});
+const cutscene=document.getElementById("cutscene"),openLetter=document.getElementById("openLetter");
+let cutsceneTimer=null;
+function showLetterCutscene(){
+ cutscene.classList.add("active");
+ document.body.classList.add("cutscene-mode");
+ const reveal=()=>{
+  cutscene.classList.remove("active");
+  document.body.classList.remove("cutscene-mode");
+  document.getElementById("letterHeading").classList.add("revealed");
+  document.getElementById("letterTitle").classList.add("revealed");
+  document.getElementById("letterWrap").classList.add("revealed");
+ };
+ openLetter.onclick=()=>{if(cutsceneTimer)clearTimeout(cutsceneTimer);reveal();};
+}
 const audio=document.getElementById("audio"),volume=document.getElementById("volume"),volumeLabel=document.getElementById("volumeLabel"),playBtn=document.getElementById("playBtn");
 audio.volume=.2;
 let resumeAfterMute=false;
