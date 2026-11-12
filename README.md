@@ -18,7 +18,7 @@ This update is on the `anniversary-12-month-update` branch. Merge its pull reque
 - Local audio starts at **20% volume** and can be adjusted.
 - Paste an `open.spotify.com` playlist, album, track, artist, show, or episode link and press Enter to embed Spotify.
 - Spotify's embedded player has its own volume controls; the website slider controls local audio only.
-- To host a song for all visitors, add an audio file you have permission to distribute under `assets/music/` and update the audio source in `index.html`. Do not upload copyrighted music without permission.
+- To use your own background music for all visitors, upload one audio file you have permission to distribute into `assets/music/` and name it exactly `background.mp3`. The website loads `assets/music/background.mp3` automatically and starts at 20% volume. You can still use the Upload song button to test a different local file on your own device. Do not upload copyrighted music without permission.
 
 ## Monthly updates
 Use `MONTHLY_UPDATE_TEMPLATE.md` as a checklist. Keep the personal letter as the final page after the story, and preserve earlier versions in Git history.
