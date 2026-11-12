@@ -13,12 +13,15 @@ Open `index.html` in a modern browser. Scene photographs load from Unsplash and 
 
 This update is on the `anniversary-12-month-update` branch. Merge its pull request into `main` before publishing.
 
-## Music player
-- Local audio upload plays on the visitor's device only; the file is not sent to GitHub.
-- Local audio starts at **20% volume** and can be adjusted.
-- Paste an `open.spotify.com` playlist, album, track, artist, show, or episode link and press Enter to embed Spotify.
-- Spotify's embedded player has its own volume controls; the website slider controls local audio only.
-- To host a song for all visitors, add an audio file you have permission to distribute under `assets/music/` and update the audio source in `index.html`. Do not upload copyrighted music without permission.
+## Background music
+- The website owner adds the soundtrack; visitors do not upload anything.
+- Put your MP3 in `assets/music/` and name it exactly `background.mp3`.
+- The site loads `assets/music/background.mp3` automatically.
+- The volume starts at **20%**. Setting it to **0% pauses** playback; raising it again resumes if it was playing before being muted.
+- Only add music you created or have permission to distribute.
+
+## Scene photographs
+Story backgrounds use free-to-use Unsplash photographs. The images are selected to match the scene themes: a moonlit castle, misty lantern forest, stormy sea, lantern festival, and golden-hour road.
 
 ## Monthly updates
 Use `MONTHLY_UPDATE_TEMPLATE.md` as a checklist. Keep the personal letter as the final page after the story, and preserve earlier versions in Git history.
